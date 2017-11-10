@@ -1,7 +1,7 @@
 const _ = require('lodash');
 const utils = require('./utils.js');
 const toPixels = utils.toPixels;
-
+const max = Math.max;
 const each = _.each;
 
 class Screen {
@@ -47,6 +47,14 @@ class Screen {
             
         this.container.style.width = toPixels(this.width);
         this.container.style.height = toPixels(this.height);
+        
+        const clientWidth = document.body.clientWidth;
+        const clientHeight = document.body.clientHeight;
+        
+        const scaleX = clientWidth / this.width;
+        const scaleY = clientHeight / this.height;
+        
+        //this.container.style.transform = `scale(${max(scaleX, scaleY)})`;
     }
     
     clear() {
@@ -58,9 +66,10 @@ class Screen {
         player.classList.add('player');
         player.style.width = toPixels(playerData.size);
         player.style.height = toPixels(playerData.size);
-        player.style.left = toPixels(playerData.x);
-        player.style.top = toPixels(playerData.y);
+        player.style.left = toPixels(playerData.x - playerData.size);
+        player.style.top = toPixels(playerData.y - playerData.size);
         player.id = name;
+        player.style.background = playerData.color;
         this.container.appendChild(player);
     }
     

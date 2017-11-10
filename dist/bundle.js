@@ -3554,6 +3554,9 @@ module.exports = function(obj, fn){
 const config = __webpack_require__(23);
 const io = __webpack_require__(25);
 const Screen = __webpack_require__(47);
+const utils = __webpack_require__(49);
+
+const getRelative = utils.getRelative;
 
 const gameScreen = new Screen(
     config.worldWidth,
@@ -3574,13 +3577,12 @@ document.querySelector('button').addEventListener('click', () => {
     document.querySelector('.modal').classList.remove('open');
 });
 
-document.querySelector(Screen.containerClass).addEventListener('mousemove', event => {
-    const x = event.clientX;
-    const y = event.clientY;
+document.querySelector(Screen.containerClass).addEventListener('mousemove', function(event) {
+    const velocity = getRelative(event, this);
     
     socket.emit('playerMoving', {
-        x: x,
-        y: y,
+        x: velocity.x,
+        y: velocity.y,
         name: playerName
     });
 });
@@ -6944,7 +6946,7 @@ Backoff.prototype.setJitter = function(jitter){
 const _ = __webpack_require__(48);
 const utils = __webpack_require__(49);
 const toPixels = utils.toPixels;
-
+const max = Math.max;
 const each = _.each;
 
 class Screen {
@@ -6990,6 +6992,14 @@ class Screen {
             
         this.container.style.width = toPixels(this.width);
         this.container.style.height = toPixels(this.height);
+        
+        const clientWidth = document.body.clientWidth;
+        const clientHeight = document.body.clientHeight;
+        
+        const scaleX = clientWidth / this.width;
+        const scaleY = clientHeight / this.height;
+        
+        //this.container.style.transform = `scale(${max(scaleX, scaleY)})`;
     }
     
     clear() {
@@ -7001,9 +7011,10 @@ class Screen {
         player.classList.add('player');
         player.style.width = toPixels(playerData.size);
         player.style.height = toPixels(playerData.size);
-        player.style.left = toPixels(playerData.x);
-        player.style.top = toPixels(playerData.y);
+        player.style.left = toPixels(playerData.x - playerData.size);
+        player.style.top = toPixels(playerData.y - playerData.size);
         player.id = name;
+        player.style.background = playerData.color;
         this.container.appendChild(player);
     }
     
@@ -24113,8 +24124,24 @@ module.exports = Screen;
 
 const toPixels = number => `${number}px`;
 
+function getRelative(evt, element) {
+    var rect = element.getBoundingClientRect();
+    var scrollTop = document.documentElement.scrollTop ? 
+        document.documentElement.scrollTop : document.body.scrollTop;
+    var scrollLeft = document.documentElement.scrollLeft ? 
+        document.documentElement.scrollLeft : document.body.scrollLeft;
+    
+    var elementLeft = rect.left + scrollLeft;  
+    var elementTop = rect.top + scrollTop;
+    
+    const x = evt.pageX - elementLeft;
+    const y = evt.pageY - elementTop;
+    return {x: x, y: y};
+}
+
 module.exports = {
-    toPixels: toPixels
+    toPixels: toPixels,
+    getRelative: getRelative
 };
 
 /***/ })

@@ -1,5 +1,7 @@
 body {
     background: url('./background.png');
+    width: 100vw;
+    height: 100vh;
 }
 
 .game-container {

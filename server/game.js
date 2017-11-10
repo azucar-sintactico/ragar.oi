@@ -76,7 +76,7 @@ class Game {
     run() {
         const tickInterval = setInterval(this.tick, 40);
         const occasionalInterval = setInterval(this.occasionalMechanics, 5000);
-        const recurrentInterval = setInterval(this.recurrentMechanics, 100);
+        const recurrentInterval = setInterval(this.recurrentMechanics, 40);
 
         this.intervals = [
             tickInterval,

@@ -1,6 +1,9 @@
 const config = require('../config.js');
 const io = require('socket.io-client');
 const Screen = require('./screen.js');
+const utils = require('./utils.js');
+
+const getRelative = utils.getRelative;
 
 const gameScreen = new Screen(
     config.worldWidth,
@@ -21,13 +24,12 @@ document.querySelector('button').addEventListener('click', () => {
     document.querySelector('.modal').classList.remove('open');
 });
 
-document.querySelector(Screen.containerClass).addEventListener('mousemove', event => {
-    const x = event.clientX;
-    const y = event.clientY;
+document.querySelector(Screen.containerClass).addEventListener('mousemove', function(event) {
+    const velocity = getRelative(event, this);
     
     socket.emit('playerMoving', {
-        x: x,
-        y: y,
+        x: velocity.x,
+        y: velocity.y,
         name: playerName
     });
 });

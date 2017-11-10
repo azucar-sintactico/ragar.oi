@@ -13,12 +13,13 @@ class Player {
         this.position = position;
         this.velocity = velocity;
         this.size = size;
+        this.color = color;
     }
     
     tick() {
         const dP = this
             .velocity
-            .scale(0.05);
+            .scale(0.4);
             
         this.position = this
             .position
@@ -34,7 +35,8 @@ class Player {
         );
         
         const distance = this.position
-            .minus(enemy.position)
+            .minus(new Vector(this.size / 2, this.size / 2))
+            .minus(enemy.position.minus(new Vector(enemy.size / 2, enemy.size / 2)))
             .magnitude();
 
         return distance <= radio;
