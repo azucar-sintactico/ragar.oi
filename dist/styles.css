@@ -1,0 +1,47 @@
+body {
+    background: url('./background.png');
+}
+
+.game-container {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    border: 1px dashed green;
+}
+
+.player {
+    position: absolute;
+    border-radius: 100%;
+    background: red;
+}
+
+.modal {
+    position: fixed;
+    left: -999px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 200px;
+    height: 200px;
+    
+    background: #ccc;
+    z-index: 999;
+}
+
+.modal.open {
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.modal-contents {
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    position: relative;
+    text-align: center;
+}
+
+button {
+    margin-top: 30px;
+}
